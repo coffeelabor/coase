@@ -1,0 +1,130 @@
+unit Barterp;
+// 3 September 2018
+//  Drafting set-up to allow for two forms of agent
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Label2: TLabel;
+    NumFAgentsBox: TEdit;
+    NumHAgentsBox: TEdit;
+    Label3: TLabel;
+    Button2: TButton;
+    Button3: TButton;
+    CurrentRound: TEdit;
+    Label4: TLabel;
+    Label5: TLabel;
+    MutationRateBox: TEdit;
+    TotalPeriodsBox: TEdit;
+    ShowPayoffsBox: TCheckBox;
+    ShowRelPricesBox: TCheckBox;
+    CheckEfficiencyBox: TCheckBox;
+    Label9: TLabel;
+    CheckPeriodBox: TEdit;
+    Label10: TLabel;
+    ReplacementRateBox: TEdit;
+    Label12: TLabel;
+    NumGoodsBox: TEdit;
+    Label13: TLabel;
+    MaxTriesBox: TEdit;
+    Label14: TLabel;
+    OXBox: TEdit;
+    Label11: TLabel;
+    ProducerShiftRateBox: TEdit;
+    VarySupplyCkBox: TCheckBox;
+    CommonPriceCheckBox: TCheckBox;
+    CalcPriceDispersionBox: TCheckBox;
+    EquiInitialPriceBox: TCheckBox;
+    PauseBtn: TButton;
+    Label1: TLabel;
+    ReproducePeriodBox: TEdit;
+    ShowInventoriesCkBox: TCheckBox;
+    Label6: TLabel;
+    DepreciationRateBox: TEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button3Click(Sender: TObject);
+    procedure Button2MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure VarySupplyCkBoxClick(Sender: TObject);
+    procedure PauseBtnClick(Sender: TObject);
+  private
+  public
+    Running : Boolean;
+  end;
+  RealArray = Array of Extended;
+	AgentH = class(TObject)
+		S,Index,Labour : Integer;
+    Kill,Reproduce : Boolean;
+    P,X,Buy,ExchangeFor : RealArray;
+    Score,Fitness : Extended;
+    Constructor Init(I,Ind : Integer);
+    Procedure Copy(N : Integer); overload;
+    Procedure CopyAndMutate(N : Integer);
+    Procedure Copy(K,N : Integer); overload;
+    Procedure Eat;
+    Procedure CommonPriceEat(EPrices : RealArray);
+    Function Trade(B : Agent) : Boolean;
+    Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
+    Function Lambda : Real;
+    Function CommonPriceLambda(EPrices : RealArray) : Real;
+    Procedure SetDemandAndSupply;
+    Procedure SetCommonPriceDemandAndSupply(EPrices : RealArray);
+  end;
+  AgentF = class(TObject)
+    T,Index,Produces : Integer;
+    Kill,Reproduce : Boolean;
+    Q,Y,Sell,ExchangeFor : RealArray;
+    ProduceAmount,Score,Fitness : Extended;
+    Constructor Init(I,Ind : Integer);
+    Procedure Copy(N : Integer); overload;
+    Procedure CopyAndMutate(N : Integer);
+    Procedure Copy(K,N : Integer); overload;
+    Procedure Eat;
+    Procedure CommonPriceEat(EPrices : RealArray);
+    Function Trade(B : Agent) : Boolean;
+    Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
+    Function Lambda : Real;
+    Function CommonPriceLambda(EPrices : RealArray) : Real;
+    Procedure SetDemandAndSupply;
+    Procedure SetCommonPriceDemandAndSupply(EPrices : RealArray);
+  end;
+  Intarray = Array of Integer;
+var
+  NumGoods : Integer;
+  OX : Array of Real;
+  Form1: TForm1;
+
+implementation
+
+{$R *.DFM}
+
+uses Math,Pile,InputParameters, PriceMeter, XYGraphu, StatisticsU;
+
+var
+	Agents : Array of Array of Agent;
+  PAgents : Array of Intarray;
+  PGoods : IntArray;
+  Prices : TStatistics;
+	ReproducePeriod,CheckPeriod,Periods : Integer;
+	MaxTries : Integer;
+  NumAgents : Array of Integer;
+  TOX : RealArray;
+  AvePDev,AvePrice : RealArray;
+  ScoreAve : RealArray;
+  TotalAgents : Integer;
+  TotalPeriods : Longint;
+	RSeed : Longint = 123456;
+  CalcPriceDispersion,EquiInitialPrices,VarySupply,CheckEfficiency,
+    HaltSimulation,Pausing : Boolean;
+  AverageScore,CommonPriceScore,ReplacementRate,
+    DepreciationRate,ProducerShiftRate,MRate : Extended;
+
+var
+  PriceGraph,PopGraph,StdDevGraph,InventoryGraph : TXYGraph;
