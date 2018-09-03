@@ -1,1 +1,11 @@
-# augustus
+// This is draft code for initialising firm and household agents
+
+Constructor AgentC.Init(I,Ind : Integer);
+var 
+  J: Integer;
+begin
+  inherited Create;
+  Index := Ind;
+  Score := 0;
+  Produces := I; 
+  
