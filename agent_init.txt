@@ -1,11 +1,52 @@
-// This is draft code for initialising firm and household agents
+// This is draft code for initialising household and firm agents 
+// Need to work out where 'ExchangeFor' variable fits into exchange
+// Score for firms is effectively accumulated profit - carry over to pay for labour in future periods
+// Allow firms to go into 'debt' - ignoring money for purposes of this model of exchange 
+// Capital and savings in future versions of model
 
-Constructor AgentC.Init(I,Ind : Integer);
+Constructor AgentH.Init(I,Ind : Integer);
 var 
   J: Integer;
 begin
   inherited Create;
   Index := Ind;
   Score := 0;
-  Produces := I; 
+  Labour := I;
+  SetLength(P,NumGoods+1);
+  SetLength(X,NumGoods+1);
+  SetLength(Buy,NumGoods+1);
+  SetLength(ExchangeFor,NumGoods+1);
+  if CheckEfficiency then for J := 1 to NumGoods do P[J] := 1
+  else if EquiInitialPrices then
+    for J := 1 to NumGoods do P[J] := OX[NumGoods]/OX[J]
+  else for J := 1 to NumGoods do P[J] := Random;
+  for J := 1 to NumGoods do X[J] := 0;
+  ProduceAmount := NumGoods*OX[Produces];
+  X[Produces] := ProduceAmount;
+  P[Produces] := P[Produces]*0.8;
+  SetDemandAndSupply;
+end;
+
+Constructor AgentF.Init(I,Ind : Integer);
+var
+  J: Integer;
+begin
+  inherited Create;
+  Index := Ind;
+  Score := 0;
+  Produces := I,
+  SetLength(Q,NumGoods+1);
+  SetLength(Y,NumGoods+1);
+  SetLength(Sell,NumGoods+1);
+  SetLength(ExchangeFor,NumGoods+1);
+   else if EquiInitialPrices then
+    for J := 1 to NumGoods do P[J] := OX[NumGoods]/OX[J]
+  else for J := 1 to NumGoods do P[J] := Random;
+  for J := 1 to NumGoods do X[J] := 0;
+  ProduceAmount := NumGoods*OX[Produces];
+  X[Produces] := ProduceAmount;
+  P[Produces] := P[Produces]*0.8;
+  SetDemandAndSupply;
+end;
+  
   
