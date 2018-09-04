@@ -59,8 +59,8 @@ type
     Running : Boolean;
   end;
   RealArray = Array of Extended;
-	AgentH = class(TObject)
-		S,Index,Labour : Integer;
+  AgentH = class(TObject)
+    S,Index,Labour : Integer;
     Kill,Reproduce : Boolean;
     P,X,Buy,ExchangeFor : RealArray;
     Score,Fitness : Extended;
