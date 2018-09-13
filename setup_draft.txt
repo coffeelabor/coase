@@ -60,9 +60,9 @@ type
   end;
   RealArray = Array of Extended;
   AgentH = class(TObject)
-    S,Index,Labour : Integer;
+    Index,Labour : Integer;
     Kill,Reproduce : Boolean;
-    P,X,Buy,ExchangeFor : RealArray;
+    S,P,X,Buy,ExchangeFor : RealArray;
     Score,Fitness : Extended;
     Constructor Init(I,Ind : Integer);
     Procedure Copy(N : Integer); overload;
@@ -78,9 +78,9 @@ type
     Procedure SetCommonPriceDemandAndSupply(EPrices : RealArray);
   end;
   AgentF = class(TObject)
-    T,Index,Produces : Integer;
+    Index,Produces : Integer;
     Kill,Reproduce : Boolean;
-    Q,Y,Sell,ExchangeFor : RealArray;
+    T,Q,Y,Sell,ExchangeFor : RealArray;
     ProduceAmount,Profit,Fitness : Extended;
     Constructor Init(I,Ind : Integer);
     Procedure Copy(N : Integer); overload;
@@ -108,7 +108,8 @@ implementation
 uses Math,Pile,InputParameters, PriceMeter, XYGraphu, StatisticsU;
 
 var
-	Agents : Array of Array of Agent;
+  AgentsF : Array of Array of AgentF;
+  AgentsH : Array of Array of AgentH;
   PAgents : Array of Intarray;
   PGoods : IntArray;
   Prices : TStatistics;
