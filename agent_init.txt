@@ -33,7 +33,7 @@ var
 begin
   inherited Create;
   Index := Ind;
-  Score := 0;
+  Profit := 0;
   Produces := I,
   SetLength(Q,NumGoods+1);
   SetLength(Y,NumGoods+1);
