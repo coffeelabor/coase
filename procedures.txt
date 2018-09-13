@@ -1,0 +1,56 @@
+## draft procedures and functions
+
+## Household price mutation
+Procedure AgentH.PriceMutate(N : Integer);
+const
+  delta = 0.95;
+var
+  I : Integer;
+begin
+  for I := 1 to NumGoods do begin
+    P[I] := AgentsH[Produces,N].P[I];
+    if not CheckEfficiency and (Random < MRate) then begin
+      if Random < 0.5 then P[I] := P[I]*Delta
+      else P[I] := P[I]/Delta;
+    end;
+  end;
+end;
+
+##Firm price mutation
+Procedure AgentF.PriceMutate(N : Integer);
+const
+  delta = 0.95;
+var
+  I : Integer;
+begin
+  for I := 1 to NumGoods do begin
+    Q[I] := AgentsH[Produces,N].Q[I];
+    if not CheckEfficiency and (Random < MRate) then begin
+      if Random < 0.5 then Q[I] := Q[I]*Delta
+      else Q[I] := Q[I]/Delta;
+    end;
+  end;
+end;
+
+## Household wage mutation
+Procedure AgentH.WageMutate(N : Integer);
+const
+  delta = 0.95;
+var
+  I : Integer;
+begin
+  if Random < 0.5 then S := S*Delta
+  else S := S/Delta;
+end;
+
+## Firm wage mutation
+Procedure AgentH.WageMutate(N : Integer);
+const
+  delta = 0.95;
+var
+  I : Integer;
+begin
+  if Random < 0.5 then T := S*Delta
+  else T := T/Delta;
+end;
+
