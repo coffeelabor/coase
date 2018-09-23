@@ -1,7 +1,7 @@
 ## draft procedures and functions
 
 ## Household price mutation
-Procedure AgentH.PriceMutate(N : Integer);
+Procedure AgentH.PriceMutateH(N : Integer);
 const
   delta = 0.95;
 var
@@ -19,7 +19,7 @@ begin
 end;
 
 ##Firm price mutation
-Procedure AgentF.PriceMutate(N : Integer);
+Procedure AgentF.PriceMutateF(N : Integer);
 const
   delta = 0.95;
 var
@@ -48,8 +48,8 @@ begin
     J := 1 + Random(NumAgentsH[G]);
     K := 1 + Random(NumAgentsH[G]);
     if AgentsH[G,J].Score > AgentsH[G,K].Score then
-      AgentsH[G,K].CopyAndMutate(J)
-    else AgentsH[G,J].CopyAndMutate(K);
+      AgentsH[G,K].PriceMutateH(J)
+    else AgentsH[G,J].PriceMutateH(K);
   end;
   for I := 1 to NumAgentsH[G] do AgentsH[G,I].Score := 0;
 end;
@@ -67,8 +67,8 @@ begin
     J := 1 + Random(NumAgentsF[G]);
     K := 1 + Random(NumAgentsF[G]);
     if AgentsF[G,J].Score > AgentsF[G,K].Score then
-      AgentsF[G,K].CopyAndMutate(J)
-    else AgentsF[G,J].CopyAndMutate(K);
+      AgentsF[G,K].PriceMutateF(J)
+    else AgentsF[G,J].PriceMutateF(K);
   end;
   for I := 1 to NumAgentsF[G] do AgentsF[G,I].Score := 0;
 end;
