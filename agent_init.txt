@@ -9,9 +9,9 @@ var
   J: Integer;
 begin
   inherited Create;
-  Index := Ind;
   Score := 0;
   Labour := I;
+  Income := 0;
   SetLength(P,NumGoods+1);
   SetLength(X,NumGoods+1);
   SetLength(Buy,NumGoods+1);
@@ -21,9 +21,6 @@ begin
     for J := 1 to NumGoods do P[J] := OX[NumGoods]/OX[J]
   else for J := 1 to NumGoods do P[J] := Random;
   for J := 1 to NumGoods do X[J] := 0;
-  ProduceAmount := NumGoods*OX[Produces];
-  X[Produces] := ProduceAmount;
-  P[Produces] := P[Produces]*0.8;
   SetDemandAndSupply;
 end;
 
