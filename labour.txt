@@ -1,0 +1,13 @@
+## draft labour exchange and production procedures
+
+Procedure Agent.Production (Y : Integer);
+var
+  I,J : Integer;
+begin
+  for I := 1 to NumGoods do begin
+    Y[Produces] := 0
+  end;
+  for I := 1 to NumGoods do begin
+    for J : = NumAgentsF[I] do
+      Y[Produces] := Power(LabourPurchased,Alpha)
+   end;
