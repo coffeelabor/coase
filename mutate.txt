@@ -1,4 +1,4 @@
-## draft procedures and functions
+## draft copy and mutation procedures
 
 ## Household price mutation
 Procedure AgentH.PriceMutateH(N : Integer);
