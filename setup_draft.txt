@@ -115,7 +115,8 @@ var
   Prices : TStatistics;
 	ReproducePeriod,CheckPeriod,Periods : Integer;
 	MaxTries : Integer;
-  NumAgents : Array of Integer;
+  NumAgentsF : Array of Integer;
+  NumAgentsH : Array of Integer;
   TOX : RealArray;
   AvePDev,AvePrice : RealArray;
   ScoreAve : RealArray;
