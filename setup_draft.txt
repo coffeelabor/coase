@@ -113,8 +113,9 @@ var
   PAgents : Array of Intarray;
   PGoods : IntArray;
   Prices : TStatistics;
-	ReproducePeriod,CheckPeriod,Periods : Integer;
-	MaxTries : Integer;
+  ReproducePeriod,CheckPeriod,Periods : Integer;
+  MaxTries : Integer;
+  Alpha : Extended;
   NumAgentsF : Array of Integer;
   NumAgentsH : Array of Integer;
   TOX : RealArray;
