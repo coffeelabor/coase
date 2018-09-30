@@ -80,7 +80,7 @@ type
   AgentF = class(TObject)
     Index,Produces : Integer;
     Kill,Reproduce : Boolean;
-    T,Q,Y,Sell,ExchangeFor : RealArray;
+    T,P,X,Sell,ExchangeFor : RealArray;
     ProduceAmount,Profit,Fitness : Extended;
     Constructor Init(I,Ind : Integer);
     Procedure Copy(N : Integer); overload;
