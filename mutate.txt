@@ -36,6 +36,7 @@ begin
   end;
 end;
 
+## get next gen households
 Procedure GetNextGenerationH1(G : Integer);
 var
 	I,J,K,Replacements : Integer;
@@ -54,7 +55,7 @@ begin
   for I := 1 to NumAgentsH[G] do AgentsH[G,I].Score := 0;
 end;
 
-
+## get next gen firms
 Procedure GetNextGenerationF1(G : Integer);
 var
 	I,J,K,Replacements : Integer;
