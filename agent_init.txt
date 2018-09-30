@@ -33,15 +33,13 @@ begin
   Profit := 0;
   Produces := I,
   SetLength(Q,NumGoods+1);
-  SetLength(Y,NumGoods+1);
+  SetLength(X,NumGoods+1);
   SetLength(Sell,NumGoods+1);
   SetLength(ExchangeFor,NumGoods+1);
    else if EquiInitialPrices then
     for J := 1 to NumGoods do P[J] := OX[NumGoods]/OX[J]
   else for J := 1 to NumGoods do P[J] := Random;
   for J := 1 to NumGoods do X[J] := 0;
-  ProduceAmount := NumGoods*OX[Produces];
-  X[Produces] := ProduceAmount;
   P[Produces] := P[Produces]*0.8;
   SetDemandAndSupply;
 end;
