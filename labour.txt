@@ -8,6 +8,15 @@ begin
     X[Produces] := 0
   end;
   for I := 1 to NumGoods do begin
-    for J : = NumAgentsF[I] do
+    for J := NumAgentsF[I] do
       X[Produces] := Power(LabourPurchased,Alpha)
    end;
+
+## draft labour exchange function
+
+Function Labour.Trade (B : Integer);
+var
+  I : Integer;
+begin
+  
+  
