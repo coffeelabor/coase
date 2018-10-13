@@ -63,7 +63,7 @@ type
     Index,Labour : Integer;
     Kill,Reproduce : Boolean;
     S,P,X,Buy,ExchangeFor : RealArray;
-    Score,Fitness : Extended;
+    Score,Fitness,LabourPH : Extended;
     Constructor Init(I,Ind : Integer);
     Procedure Copy(N : Integer); overload;
     Procedure CopyAndMutate(N : Integer);
@@ -81,7 +81,7 @@ type
     Index,Produces : Integer;
     Kill,Reproduce : Boolean;
     T,P,X,Sell,ExchangeFor : RealArray;
-    ProduceAmount,Profit,Fitness : Extended;
+    ProduceAmount,Profit,Fitness,LabourPF : Extended;
     Constructor Init(I,Ind : Integer);
     Procedure Copy(N : Integer); overload;
     Procedure CopyAndMutate(N : Integer);
