@@ -14,9 +14,8 @@ begin
 
 ## draft labour exchange function
 
-Function Labour.Trade (B : Integer);
+Function Labour.Trade (B : Agent) : Boolean;
 var
   I : Integer;
 begin
-  
-  
+  if Labour PH < LabourPF 
