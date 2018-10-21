@@ -78,7 +78,7 @@ type
     Procedure SetCommonPriceDemandAndSupply(EPrices : RealArray);
   end;
   AgentF = class(TObject)
-    Index,Produces : Integer;
+    Identity,Produces : Integer;
     Kill,Reproduce : Boolean;
     T,P,X,Sell,ExchangeFor : RealArray;
     ProduceAmount,Profit,Fitness,LabourPF : Extended;
