@@ -33,9 +33,15 @@ begin
   VarySupply := VarySupplyCkBox.Checked;
   MRate := StrToFloat(MutationRateBox.Text);
   ReproducePeriod := StrToInt(ReproducePeriodBox.Text);
+  
+  
   for I := 1 to NumGoods do
     for J := 1 to NumAgents[I] do
-      Agents[I,J] := Agent.Init(I,J);
+      AgentsF[I,J] := AgentF.Init(I,J);
+      
+  for I := 1 to TotalAgentsH do 
+  	AgentsH[I] := AgentH.Init(I);
+  
   if ShowPayoffsBox.Checked then InitializePayoffsGraph;
   if VarySupply then begin
     if not Assigned(PopGraph) then PopGraph := TXYGraph.Create(Self);
