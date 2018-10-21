@@ -12,6 +12,7 @@ begin
   Score := 0;
   Labour := 1;
   Income := 0;
+  Identity := I
   SetLength(P,NumGoods+1);
   SetLength(X,NumGoods+1);
   SetLength(Buy,NumGoods+1);
