@@ -109,7 +109,7 @@ uses Math,Pile,InputParameters, PriceMeter, XYGraphu, StatisticsU;
 
 var
   AgentsF : Array of Array of AgentF;
-  AgentsH : Array of Array of AgentH;
+  AgentsH : Array of AgentH;
   PAgents : Array of Intarray;
   PGoods : IntArray;
   Prices : TStatistics;
