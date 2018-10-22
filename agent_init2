@@ -8,6 +8,7 @@ begin
   Score := 0;
   LabourH := 1;
   Income := 0;
+  Wh := 0;
   Identity := I
   SetLength(P,NumGoods+1);
   SetLength(X,NumGoods+1);
@@ -21,6 +22,7 @@ begin
   Index := Ind;
   LabourF := 0
   Profit := 0;
+  Wf := 0
   Produces := I;
   Input := 0;
   SetLength(Q,NumGoods+1);
