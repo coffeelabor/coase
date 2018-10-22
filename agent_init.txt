@@ -10,7 +10,7 @@ var
 begin
   inherited Create;
   Score := 0;
-  Labour := 1;
+  LabourH := 1;
   Income := 0;
   Identity := I
   SetLength(P,NumGoods+1);
@@ -32,7 +32,8 @@ begin
   inherited Create;
   Index := Ind;
   Profit := 0;
-  Produces := I,
+  Produces := I;
+  Input := 0;
   SetLength(Q,NumGoods+1);
   SetLength(X,NumGoods+1);
   SetLength(Sell,NumGoods+1);
