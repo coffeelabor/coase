@@ -1,0 +1,28 @@
+## Price only model to deal with price/quantity optimisation routine problems
+
+Constructor AgentH.Init(I,Ind : Integer);
+var 
+  J: Integer;
+begin
+  inherited Create;
+  Score := 0;
+  LabourH := 1;
+  Income := 0;
+  Identity := I
+  SetLength(P,NumGoods+1);
+  SetLength(X,NumGoods+1);
+end;
+
+Constructor AgentF.Init(I,Ind : Integer);
+var
+  J: Integer;
+begin
+  inherited Create;
+  Index := Ind;
+  LabourF := 0
+  Profit := 0;
+  Produces := I;
+  Input := 0;
+  SetLength(Q,NumGoods+1);
+  SetLength(X,NumGoods+1);
+end;
