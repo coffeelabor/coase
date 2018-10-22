@@ -9,7 +9,7 @@ begin
   end;
   for I := 1 to NumGoods do begin
     for J := NumAgentsF[I] do
-      X[Produces] := Power(LabourPurchased,Alpha)
+      X[Produces] := Gamma*Input
    end;
 
 ## draft labour exchange function
@@ -18,4 +18,17 @@ Function Labour.Trade (B : Agent) : Boolean;
 var
   I : Integer;
 begin
-  if Labour PH < LabourPF 
+  if (LabourPH + B.LabourPF)/2 > Gamma*B.Q[Produces] then begin;
+    if Labour = 1 then begin;
+      if Input = 0 then begin;
+        Income := (LabourPH + B.LabourPF)/2
+        Profit := Profit - (LabourPH + B.LabourPF)/2
+        Labour := 0
+        Input := 1
+       end;
+      end;
+    end;
+   
+      
+  
+  
