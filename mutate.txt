@@ -8,12 +8,12 @@ var
   I : Integer;
 begin
   for I := 1 to NumGoods do begin
-    P[I] := AgentsH[Produces,N].P[I];
+    P[I] := AgentsH[N].P[I];
     if not CheckEfficiency and (Random < MRate) then begin
-      if Random < 0.5 then P[I] := P[I]*Delta
-      else P[I] := P[I]/Delta;
-      if Random < 0.5 then S := S*Delta
-      else S := S/Delta; 
+      if Random < 0.5 then P[I] := P[I]*delta
+      else P[I] := P[I]/delta;
+      if Random < 0.5 then Wh := Wh*delta
+      else Wh := Wh/Delta; 
     end;
   end;
 end;
@@ -26,12 +26,12 @@ var
   I : Integer;
 begin
   for I := 1 to NumGoods do begin
-    Q[I] := AgentsH[Produces,N].Q[I];
+    Q[I] := AgentsF[Produces,N].Q[I];
     if not CheckEfficiency and (Random < MRate) then begin
       if Random < 0.5 then Q[I] := Q[I]*Delta
       else Q[I] := Q[I]/Delta;
-      if Random < 0.5 then T := T*Delta
-      else T := T/Delta;
+      if Random < 0.5 then Wf := Wf*Delta
+      else Wf := Wf/Delta;
     end;
   end;
 end;
