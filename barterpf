@@ -60,43 +60,32 @@ type
   end;
   RealArray = Array of Extended;
   
-  AgentH = class(TObject)
-    Index,Labour : Integer;
-    Kill,Reproduce : Boolean;
-    S,P : RealArray;
-    Score,Fitness,Wh : Extended;
-    Constructor Init1(I,Ind : Integer);
-    Procedure Copy(N : Integer); overload;
-    Procedure CopyAndMutate(N : Integer);
-    Procedure Copy(K,N : Integer); overload;
-    Procedure Eat;
-    Procedure CommonPriceEat(EPrices : RealArray);
-    Function Trade(B : Agent) : Boolean;
-    Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
-    Function Lambda : Real;
-    Function CommonPriceLambda(EPrices : RealArray) : Real;
-    Procedure SetDemandAndSupply;
-    Procedure SetCommonPriceDemandAndSupply(EPrices : RealArray);
-  end;
-  
-  AgentF = class(TObject)
-    Identity,Produces : Integer;
-    Kill,Reproduce : Boolean;
-    T,P,X,Sell,ExchangeFor : RealArray;
-    ProduceAmount,Profit,Fitness,LabourPF : Extended;
-    Constructor Init2(I,Ind : Integer);
-    Procedure Copy(N : Integer); overload;
-    Procedure CopyAndMutate(N : Integer);
-    Procedure Copy(K,N : Integer); overload;
-    Procedure Eat;
-    Procedure CommonPriceEat(EPrices : RealArray);
-    Function Trade(B : Agent) : Boolean;
-    Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
-    Function Lambda : Real;
-    Function CommonPriceLambda(EPrices : RealArray) : Real;
-    Procedure SetDemandAndSupply;
-    Procedure SetCommonPriceDemandAndSupply(EPrices : RealArray);
-  end;
+Constructor AgentH.Init1(I,Ind : Integer);
+var 
+  J: Integer;
+begin
+  inherited Create;
+  Score := 0;
+  LabourH := 1;
+  Income := 0;
+  Wh := 0;
+  Identity := I
+  SetLength(P,NumGoods+1);
+end;
+
+Constructor AgentF.Init2(I,Ind : Integer);
+var
+  J: Integer;
+begin
+  inherited Create;
+  Index := Ind;
+  LabourF := 0
+  Profit := 0;
+  Wf := 0
+  Produces := I;
+  Input := 0;
+  SetLength(Q,NumGoods+1);
+end;
   
   Intarray = Array of Integer;
 
@@ -135,35 +124,3 @@ var
 
 var
   PriceGraph,PopGraph,StdDevGraph,InventoryGraph : TXYGraph;
-
-
-## agent init constructors
-
-Constructor AgentH.Init1(I,Ind : Integer);
-var 
-  J: Integer;
-begin
-  inherited Create;
-  Score := 0;
-  LabourH := 1;
-  Income := 0;
-  Wh := 0;
-  Identity := I
-  SetLength(P,NumGoods+1);
-  SetLength(X,NumGoods+1);
-end;
-
-Constructor AgentF.Init2(I,Ind : Integer);
-var
-  J: Integer;
-begin
-  inherited Create;
-  Index := Ind;
-  LabourF := 0
-  Profit := 0;
-  Wf := 0
-  Produces := I;
-  Input := 0;
-  SetLength(Q,NumGoods+1);
-  SetLength(X,NumGoods+1);
-end;
