@@ -62,9 +62,9 @@ type
   AgentH = class(TObject)
     Index,Labour : Integer;
     Kill,Reproduce : Boolean;
-    S,P,X,Buy,ExchangeFor : RealArray;
-    Score,Fitness,LabourPH : Extended;
-    Constructor Init(I,Ind : Integer);
+    P,Buy,ExchangeFor : RealArray;
+    Score,Fitness,Wh : Extended;
+    Constructor Init1(I,Ind : Integer);
     Procedure Copy(N : Integer); overload;
     Procedure CopyAndMutate(N : Integer);
     Procedure Copy(K,N : Integer); overload;
@@ -74,15 +74,13 @@ type
     Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
     Function Lambda : Real;
     Function CommonPriceLambda(EPrices : RealArray) : Real;
-    Procedure SetDemandAndSupply;
-    Procedure SetCommonPriceDemandAndSupply(EPrices : RealArray);
   end;
   AgentF = class(TObject)
     Identity,Produces : Integer;
     Kill,Reproduce : Boolean;
-    T,P,X,Sell,ExchangeFor : RealArray;
-    ProduceAmount,Profit,Fitness,LabourPF : Extended;
-    Constructor Init(I,Ind : Integer);
+    Q : RealArray;
+    Profit,Fitness,Wf : Extended;
+    Constructor Init2(I,Ind : Integer);
     Procedure Copy(N : Integer); overload;
     Procedure CopyAndMutate(N : Integer);
     Procedure Copy(K,N : Integer); overload;
