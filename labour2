@@ -1,0 +1,18 @@
+## draft labour exchange function
+
+## agents trade at average of respective wage rates if that average exceeds or is equal to price of production for firm
+
+Function Labour.Trade (B : Agent) : Boolean;
+var 
+  I : Integer;
+begin
+  if Input = 0 then begin;
+    if Labour = 1 then begin;
+      if (LabourPH + B.LabourPF)/2 >= B.Q[Produces] then begin;
+        Income := (LabourPH + B.LabourPF)/2
+        Profit := Profit - (LabourPH + B.LabourPF)/2
+        Labour := 0
+        Input := 1
+       end;
+      end;
+     end;
