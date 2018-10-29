@@ -10,9 +10,9 @@ begin
     if LabourH = 1 then begin;
       if (Wh + B.Wf)/2 >= B.Q[Produces] then begin;
         Income := (Wh + B.Wf)/2
-        Profit := Profit - (Wh + B.Wf)/2
-        Labour := 0
-        Input := 1
+        B.Profit := B.Profit - (Wh + B.Wf)/2
+        LabourH := 0
+        B.LabourF := 1
        end;
       end;
      end;
