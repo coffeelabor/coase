@@ -2,17 +2,25 @@
 
 ## agents trade at average of respective wage rates if that average exceeds or is equal to price of production for firm
 
-Function Labour.Trade (B : Agent) : Boolean;
+Function LabourPlay;
 var 
-  I : Integer;
+  G,H,I,J,K,L : Integer;
 begin
-  if B.LabourF = 0 then begin;
-    if LabourH = 1 then begin;
-      if (Wh + B.Wf)/2 >= B.Q[Produces] then begin;
-        Income := (Wh + B.Wf)/2
-        B.Profit := B.Profit - (Wh + B.Wf)/2
-        LabourH := 0
-        B.LabourF := 1
+ Shuffle(HAgents,NumAgentsH);
+  for I := 1 to NumAgentsH do begin
+      A := AgentsH[HAgents[I]];
+      Assert(Assigned(A));
+      if A.LabourH = 1 then begin;
+            K := 1 + Random(NumGoods)
+            L := 1 + Random(NumAgentsF)
+            for G := 1 to MaxLabourTries do begin
+            if AgentsF[K,L].LabourF = 0 then begin;
+                  if (A.Wh + AgentsF[K,L].Wf)/2 >= AgentsF[K,L].Q[Produces] then begin;
+                  Income := (A.Wh + AgentsF[K,L].Wf)/2
+                  AgentsF[K,L].Profit := AgentsF[K,L].Profit - (A.Wh + AgentsF[K,L].Wf)/2
+                  A.LabourH := 0
+                  AgentsF[K,L].LabourF := 1
        end;
       end;
      end;
+
