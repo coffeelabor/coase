@@ -1,0 +1,13 @@
+## utilty function
+
+Procedure AgentH.Eat;
+var
+  R : Real;
+  I : Integer;
+begin
+  R := U[1]/P[1];
+  for I := 2 to NumGoods do
+    if U[I]/P[I] < R then R := U[I]/P[I];
+  if R = 0 then Exit;
+  Score := Score + R;
+end;
