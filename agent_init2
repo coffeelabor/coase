@@ -1,6 +1,6 @@
 ## Price only model to deal with price/quantity optimisation routine problems
 
-Constructor AgentH.Init1(I,Ind : Integer);
+Constructor AgentH.Init1(I : Integer);
 var 
   J: Integer;
 begin
