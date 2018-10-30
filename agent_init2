@@ -23,6 +23,5 @@ begin
   Profit := 0;
   Wf := 0
   Produces := I;
-  Input := 0;
   SetLength(Q,NumGoods+1);
 end;
