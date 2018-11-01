@@ -1,0 +1,24 @@
+## producer shift
+
+Procedure ProducerShift;
+var
+	I,J,K,L,M,N,Replacements : Integer;
+begin
+	Replacements := Round(TotalAgents*ProducerShiftRate);
+  for I := 1 to NumGoods do begin
+    for J := 1 to Replacements do begin
+      Application.ProcessMessages;
+      if HaltSimulation then Exit;
+      K := 1 + Random(NumGoods);
+      repeat
+        L := 1 + Random(NumGoods);
+      until L <> K;
+      M := 1 + Random(NumAgents[K]);
+      N := 1 + Random(NumAgents[L]);
+      if ScoreAve[K] < ScoreAve[L] then Agents[K,M].Copy(L,N)
+      else Agents[L,N].Copy(K,M);
+//      if Agents[K,M].Score < Agents[L,N].Score then Agents[K,M].Copy(L,N)
+//      else Agents[L,N].Copy(K,M);
+    end;
+  end;
+end;
