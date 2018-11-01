@@ -67,9 +67,9 @@ begin
     if HaltSimulation then Exit;
     J := 1 + Random(NumAgentsF[G]);
     K := 1 + Random(NumAgentsF[G]);
-    if AgentsF[G,J].Score > AgentsF[G,K].Score then
-      AgentsF[G,K].PriceMutateF(J)
-    else AgentsF[G,J].PriceMutateF(K);
+    if AgentsF[G,J].Profit > AgentsF[G,K].Profit then
+      AgentsF[G,K].PriceMutateF(G,J)
+    else AgentsF[G,J].PriceMutateF(G,K);
   end;
   for I := 1 to NumAgentsF[G] do AgentsF[G,I].Score := 0;
 end;
