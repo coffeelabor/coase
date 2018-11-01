@@ -11,15 +11,16 @@ begin
       A := AgentsH[HAgents[I]];
       Assert(Assigned(A));
       if A.LabourH = 1 then begin;
+            for G := 1 to MaxLabourSearch do begin;
             K := 1 + Random(NumGoods)
             L := 1 + Random(NumAgentsF)
-            for G := 1 to MaxLabourTries do begin
-            if AgentsF[K,L].LabourF = 0 then begin;
-                  if (A.Wh + AgentsF[K,L].Wf)/2 >= AgentsF[K,L].Q[Produces] then begin;
-                  Income := (A.Wh + AgentsF[K,L].Wf)/2
-                  AgentsF[K,L].Profit := AgentsF[K,L].Profit - (A.Wh + AgentsF[K,L].Wf)/2
-                  A.LabourH := 0
-                  AgentsF[K,L].LabourF := 1
+                  if AgentsF[K,L].LabourF = 0 &&
+                    (A.Wh + AgentsF[K,L].Wf)/2 >= AgentsF[K,L].Q[Produces] then begin;
+                     Income := (A.Wh + AgentsF[K,L].Wf)/2
+                     AgentsF[K,L].Profit := AgentsF[K,L].Profit - (A.Wh + AgentsF[K,L].Wf)/2
+                     A.LabourH := 0
+                     AgentsF[K,L].LabourF := 1
+                     Break;
        end;
       end;
      end;
