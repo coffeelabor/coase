@@ -14,8 +14,7 @@ begin
             for G := 1 to MaxLabourSearch do begin;
             K := 1 + Random(NumGoods)
             L := 1 + Random(NumAgentsF)
-                  if AgentsF[K,L].LabourF = 0 &&
-                    (A.Wh + AgentsF[K,L].Wf)/2 >= AgentsF[K,L].Q[Produces] then begin;
+                  if AgentsF[K,L].LabourF = 0 then begin;
                      Income := (A.Wh + AgentsF[K,L].Wf)/2
                      AgentsF[K,L].Profit := AgentsF[K,L].Profit - (A.Wh + AgentsF[K,L].Wf)/2
                      A.LabourH := 0
