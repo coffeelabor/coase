@@ -11,7 +11,8 @@ begin
   Wh := 0;
   Identity := I
   SetLength(P,NumGoods+1);
-  SetLength(S,NumGoods+1)
+  SetLength(S,NumGoods+1);
+  SetLength(X,NumGoods+1);
 end;
 
 Constructor AgentF.Init2(I,Ind : Integer);
@@ -25,4 +26,5 @@ begin
   Wf := 0
   Produces := I;
   SetLength(Q,NumGoods+1);
+  SetLength(Y,NumGoods+1)
 end;
