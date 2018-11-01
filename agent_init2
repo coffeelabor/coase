@@ -11,7 +11,6 @@ begin
   Wh := 0;
   Identity := I
   SetLength(P,NumGoods+1);
-  SetLength(S,NumGoods+1);
   SetLength(X,NumGoods+1);
 end;
 
