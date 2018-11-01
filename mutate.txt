@@ -46,11 +46,11 @@ begin
   for I := 1 to Replacements do begin
     Application.ProcessMessages;
     if HaltSimulation then Exit;
-    J := 1 + Random(NumAgentsH[G]);
-    K := 1 + Random(NumAgentsH[G]);
-    if AgentsH[G,J].Score > AgentsH[G,K].Score then
-      AgentsH[G,K].PriceMutateH(J)
-    else AgentsH[G,J].PriceMutateH(K);
+    J := 1 + Random(NumAgentsH);
+    K := 1 + Random(NumAgentsH);
+    if AgentsH[J].Score > AgentsH[K].Score then
+      AgentsH[K].PriceMutateH(J)
+    else AgentsH[J].PriceMutateH(K);
   end;
   for I := 1 to NumAgentsH[G] do AgentsH[G,I].Score := 0;
 end;
