@@ -1,0 +1,146 @@
+Procedure TForm1.Button1Click(Sender: TObject);
+var
+	I,J,K,L,M : Integer;
+  RT,RTAve,RTMin,RTMax,R,R1 : Real;
+begin
+  Running := True;
+  Pausing := False;
+  Prices := TStatistics.Init(10);
+  MaxTries := StrToInt(MaxTriesBox.Text);
+  ReplacementRate := StrToFloat(ReplacementRateBox.Text);
+  ProducerShiftRate := StrToFloat(ProducerShiftRateBox.Text);
+  DepreciationRate := StrToFloat(DepreciationRateBox.Text);
+  CalcPriceDispersion := CalcPriceDispersionBox.Checked;
+  CheckEfficiency := CheckEfficiencyBox.Checked;
+  EquiInitialPrices := EquiInitialPriceBox.Checked;
+  if Assigned(Agents) then SetLength(Agents,0);
+  NumGoods := StrToInt(NumGoodsBox.Text);
+	NumAgentsH := StrToInt(NumAgentsHBox.Text);
+  TotalAgentsF := StrToInt(NumAgentsFBox.Text);
+  SetLength(NumAgentsF,1+NumGoods);
+  for I := 1 to NumGoods do
+    NumAgentsF[I] := TotalAgentsF;
+  TotalAgentsF := TotalAgents*NumGoods;
+  SetLength(AgentsF,NumGoods+1,TotalAgents+1);
+  SetLength(AgentsH,NumAgentsH+1);
+  SetLength(PAgents,NumGoods+1,TotalAgents+1);
+  SetLength(PGoods,NumGoods+1);
+  SetLength(OX,1+NumGoods);
+  SetParameters(OX,NumGoods,OXBox.Text,'OX');
+  SetLength(AvePDev,1+NumGoods);
+  SetLength(AvePrice,1+NumGoods);
+  SetLength(ScoreAve,1+NumGoods);
+  TotalPeriods := StrToInt(TotalPeriodsBox.Text);
+  CheckPeriod := StrToInt(CheckPeriodBox.Text);
+  VarySupply := VarySupplyCkBox.Checked;
+  MRate := StrToFloat(MutationRateBox.Text);
+  ReproducePeriod := StrToInt(ReproducePeriodBox.Text);
+  for I := 1 to NumGoods do
+    for J := 1 to NumAgentsF[I] do
+      AgentsF[I,J] := AgentF.Init2(I,J);      
+  for I := 1 to NumAgentsH do
+    AgentsH[I] := AgentH.Init1(I);
+  if ShowPayoffsBox.Checked then InitializePayoffsGraph;
+  if VarySupply then begin
+    if not Assigned(PopGraph) then PopGraph := TXYGraph.Create(Self);
+    InitializePopGraph;
+  end;
+  if CalcPriceDispersion then begin
+    if not Assigned(StdDevGraph) then StdDevGraph := TXYGraph.Create(Self);
+    InitializeStdDevGraph;
+  end;
+  if ShowRelPricesBox.Checked then begin
+    if not Assigned(PriceGraph) then PriceGraph := TXYGraph.Create(Self);
+    InitializePriceGraph;
+  end;
+  if ShowInventoriesCkBox.Checked then begin
+    if not Assigned(InventoryGraph) then InventoryGraph := TXYGraph.Create(Self);
+    InitializeInventoryGraph;
+  end;
+  Periods := 0;
+  HaltSimulation := False;
+  SetLength(TOX,1+NumGoods);
+  if CommonPriceCheckBox.Checked then begin
+    RTAve := 0;
+    RTMin := 10000;
+    RTMax := 0;
+    for J := 1 to 100 do begin
+      for I := 1 to NumGoods do begin
+        TOX[I] := Random;
+        for K := 1 to NumAgents[I] do Agents[I,K].Score := 0;
+      end;
+      RT := GetCommonPriceScore(TOX);
+      RTAve := RTAve + RT;
+      if RT < RTMin then RTMin := RT;
+      if RT > RTMax then RTMax := RT;
+    end;
+    Exit;
+  end;
+  if CheckEfficiency then CommonPriceScore := 1
+  else begin
+    for I := 1 to NumGoods do begin
+      TOX[I] := 1/OX[I];
+      for K := 1 to NumAgents[I] do Agents[I,K].Score := 0;
+    end;
+    CommonPriceScore := GetCommonPriceScore(TOX);
+  end;
+  Form2.Top := Top + Height;
+  Form2.Left:= Left + 10;
+  Form2.InitializePriceMemo;
+  Form2.Show;
+  for I := 1 to NumGoods do
+    for J := 1 to NumAgents[I] do begin
+      for K := 1 to NumGoods do Agents[I,J].X[K] := 0;
+      AgentsF[I,J].X[Agents[I,J].Produces] := 1;
+    end;
+	for I := 1 to TotalPeriods do begin
+    Inc(Periods);
+    if Periods mod CheckPeriod = 0 then
+      CurrentRound.Text := IntToStr(Periods);
+		LabourPlay;
+    GoodsPlay;
+    Agents[J,K].X[Agents[J,K].Produces] := 1
+    end;
+    Application.ProcessMessages; 
+    if HaltSimulation then begin
+      Running := False;
+      Exit;
+    end;
+		if Periods mod ReproducePeriod = 0 then begin
+      CalculateScoreAve;
+      for J := 1 to NumGoods do GetNextGenerationF1(J);
+      GetNextGenerationH1(J);
+      if VarySupply then if Random < ProducerShiftRate then ProducerShift;
+    end;
+		if (Periods mod CheckPeriod = 0) or (Periods = TotalPeriods) then begin
+      if ShowInventoriesCkBox.Checked then with InventoryGraph do begin
+        for J := 1 to NumGoods do Addpoint(J,Periods,TotInventory(J));
+      end;
+      if ShowPayoffsBox.Checked then with XYGraph do begin
+        AddPoint(1,Periods,
+          AverageScore/ReproducePeriod/CommonPriceScore);
+        for J := 1 to NumGoods do
+          Addpoint(J+1,Periods,ScoreAve[J]/ReproducePeriod/CommonPriceScore);
+      end;
+      for J := 1 to NumGoods do Form2.SetPrice(J,AvePrice[J]);
+      if ShowRelPricesBox.Checked then with PriceGraph do begin
+        R := 0;
+        for J := 1 to NumGoods do begin
+          R1 := AvePDev[J];
+          R := R + (R1-1)*(R1-1);
+          Addpoint(J+1,Periods,R1);
+        end;
+        AddPoint(1,Periods,10*Sqrt(R)/NumGoods);
+        AddPoint(NumGoods+1,Periods,1);
+      end;
+      if CalcPriceDispersion then with StdDevGraph do begin
+        Addpoint(1,Periods,CalculateProducerPriceStdDev(1));
+        Addpoint(2,Periods,CalculateConsumerPriceStdDev(1));
+        Addpoint(3,Periods,Prices.StandardDeviation);
+      end;
+      if VarySupply then with PopGraph do
+        for J := 1 to NumGoods do AddPoint(J,Periods,NumAgents[J]/TotalAgents);
+    end;
+	end;
+  Running := False;
+end;
