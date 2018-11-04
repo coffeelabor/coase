@@ -1,0 +1,22 @@
+Procedure AgentF.Copy(K,N : Integer);
+var
+  I,OldIndex,OldProduces: Integer;
+begin
+  if NumAgentsF[Produces] < 10 then Exit;
+  OldIndex := Index;
+  OldProduces := Produces;
+  AgentsF[K,NumAgentsF[K]+1] := Self;
+  Wf := AgentsF[K,N].Wf
+  for I := 1 to NumGoods do begin
+    P[I] := AgentsF[K,N].P[I];
+    X[I] := AgentsF[K,N].X[I];
+  end;
+  Produces := K;
+  Inc(NumAgentsF[K]);
+  Index := NumAgentsF[K];
+  if OldIndex <> NumAgentsF[OldProduces] then begin
+    AgentsF[OldProduces,OldIndex] := AgentsF[OldProduces,NumAgentsF[OldProduces]];
+    AgentsF[OldProduces,OldIndex].Index := OldIndex;
+  end;
+  Dec(NumAgentsF[OldProduces]);
+end;
