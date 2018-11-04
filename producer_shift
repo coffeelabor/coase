@@ -15,10 +15,10 @@ begin
       until L <> K;
       M := 1 + Random(NumAgents[K]);
       N := 1 + Random(NumAgents[L]);
-      if ScoreAve[K] < ScoreAve[L] then Agents[K,M].Copy(L,N)
-      else Agents[L,N].Copy(K,M);
-//      if Agents[K,M].Score < Agents[L,N].Score then Agents[K,M].Copy(L,N)
-//      else Agents[L,N].Copy(K,M);
+      if ScoreAve[K] < ScoreAve[L] then AgentsF[K,M].Copy(L,N)
+      else AgentsF[L,N].Copy(K,M);
+//      if AgentsF[K,M].Score < AgentsF[L,N].Score then AgentsF[K,M].Copy(L,N)
+//      else AgentsF[L,N].Copy(K,M);
     end;
   end;
 end;
