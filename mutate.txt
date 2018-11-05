@@ -37,11 +37,11 @@ begin
 end;
 
 ## get next gen households
-Procedure GetNextGenerationH1(G : Integer);
+Procedure GetNextGenerationH1;
 var
 	I,J,K,Replacements : Integer;
 begin
-	Replacements := Round(NumAgentsH[G]*ReplacementRate);
+	Replacements := Round(NumAgentsH*ReplacementRate);
   if Replacements = 0 then Inc(Replacements);
   for I := 1 to Replacements do begin
     Application.ProcessMessages;
