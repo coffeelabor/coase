@@ -97,8 +97,8 @@ begin
     Inc(Periods);
     if Periods mod CheckPeriod = 0 then
       CurrentRound.Text := IntToStr(Periods);
-		LabourPlay;
-    GoodsPlay;
+	LabourPlay;
+    	GoodsPlay;
     Agents[J,K].X[Agents[J,K].Produces] := 1
     end;
     Application.ProcessMessages; 
