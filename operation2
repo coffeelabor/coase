@@ -1,3 +1,349 @@
+unit Barterp;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Label2: TLabel;
+    NumFAgentsBox: TEdit;
+    NumHAgentsBox: TEdit;
+    Label3: TLabel;
+    Button2: TButton;
+    Button3: TButton;
+    CurrentRound: TEdit;
+    Label4: TLabel;
+    Label5: TLabel;
+    MutationRateBox: TEdit;
+    TotalPeriodsBox: TEdit;
+    ShowPayoffsBox: TCheckBox;
+    ShowRelPricesBox: TCheckBox;
+    CheckEfficiencyBox: TCheckBox;
+    Label9: TLabel;
+    CheckPeriodBox: TEdit;
+    Label10: TLabel;
+    ReplacementRateBox: TEdit;
+    Label12: TLabel;
+    NumGoodsBox: TEdit;
+    Label13: TLabel;
+    MaxTriesBox: TEdit;
+    Label14: TLabel;
+    OXBox: TEdit;
+    Label11: TLabel;
+    ProducerShiftRateBox: TEdit;
+    VarySupplyCkBox: TCheckBox;
+    CommonPriceCheckBox: TCheckBox;
+    CalcPriceDispersionBox: TCheckBox;
+    EquiInitialPriceBox: TCheckBox;
+    PauseBtn: TButton;
+    Label1: TLabel;
+    ReproducePeriodBox: TEdit;
+    ShowInventoriesCkBox: TCheckBox;
+    Label6: TLabel;
+    DepreciationRateBox: TEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button3Click(Sender: TObject);
+    procedure Button2MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure VarySupplyCkBoxClick(Sender: TObject);
+    procedure PauseBtnClick(Sender: TObject);
+  private
+  public
+    Running : Boolean;
+  end;
+  RealArray = Array of Extended;
+  AgentH = class(TObject)
+    Index,Labour : Integer;
+    Kill,Reproduce : Boolean;
+    P,Buy,ExchangeFor : RealArray;
+    Score,Fitness,Wh : Extended;
+    Constructor Init1(I,Ind : Integer);
+    Procedure Copy(N : Integer); overload;
+    Procedure CopyAndMutate(N : Integer);
+    Procedure Copy(K,N : Integer); overload;
+    Procedure Eat;
+    Procedure CommonPriceEat(EPrices : RealArray);
+    Function Trade(B : Agent) : Boolean;
+    Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
+    Function Lambda : Real;
+    Function CommonPriceLambda(EPrices : RealArray) : Real;
+  end;
+  AgentF = class(TObject)
+    Identity,Produces : Integer;
+    Kill,Reproduce : Boolean;
+    Q : RealArray;
+    Profit,Fitness,Wf : Extended;
+    Constructor Init2(I,Ind : Integer);
+    Procedure Copy(N : Integer); overload;
+    Procedure CopyAndMutate(N : Integer);
+    Procedure Copy(K,N : Integer); overload;
+    Procedure Eat;
+    Procedure CommonPriceEat(EPrices : RealArray);
+    Function Trade(B : Agent) : Boolean;
+    Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
+    Function Lambda : Real;
+    Function CommonPriceLambda(EPrices : RealArray) : Real;
+    Procedure SetDemandAndSupply;
+    Procedure SetCommonPriceDemandAndSupply(EPrices : RealArray);
+  end;
+  Intarray = Array of Integer;
+var
+  NumGoods : Integer;
+  OX : Array of Real;
+  Form1: TForm1;
+
+implementation
+
+{$R *.DFM}
+
+uses Math,Pile,InputParameters, PriceMeter, XYGraphu, StatisticsU;
+
+var
+  AgentsF : Array of Array of AgentF;
+  AgentsH : Array of AgentH;
+  PAgents : Array of Intarray;
+  PGoods : IntArray;
+  Prices : TStatistics;
+  ReproducePeriod,CheckPeriod,Periods : Integer;
+  MaxTries : Integer;
+  Alpha : Extended;
+  NumAgentsF : Array of Integer;
+  NumAgentsH : Array of Integer;
+  TOX : RealArray;
+  AvePDev,AvePrice : RealArray;
+  ScoreAve : RealArray;
+  TotalAgents : Integer;
+  TotalPeriods : Longint;
+	RSeed : Longint = 123456;
+  CalcPriceDispersion,EquiInitialPrices,VarySupply,CheckEfficiency,
+    HaltSimulation,Pausing : Boolean;
+  AverageScore,CommonPriceScore,ReplacementRate,
+    DepreciationRate,ProducerShiftRate,MRate : Extended;
+
+var
+  PriceGraph,PopGraph,StdDevGraph,InventoryGraph : TXYGraph;
+
+Constructor AgentH.Init(I,Ind : Integer);
+var 
+  J: Integer;
+begin
+  inherited Create;
+  Score := 0;
+  LabourH := 1;
+  Income := 0;
+  Identity := I
+  SetLength(P,NumGoods+1);
+  SetLength(X,NumGoods+1);
+  SetLength(Buy,NumGoods+1);
+  SetLength(ExchangeFor,NumGoods+1);
+  if CheckEfficiency then for J := 1 to NumGoods do P[J] := 1
+  else if EquiInitialPrices then
+    for J := 1 to NumGoods do P[J] := OX[NumGoods]/OX[J]
+  else for J := 1 to NumGoods do P[J] := Random;
+  for J := 1 to NumGoods do X[J] := 0;
+  SetDemandAndSupply;
+end;
+
+Constructor AgentF.Init(I,Ind : Integer);
+var
+  J: Integer;
+begin
+  inherited Create;
+  Index := Ind;
+  Profit := 0;
+  Produces := I;
+  Input := 0;
+  SetLength(Q,NumGoods+1);
+  SetLength(X,NumGoods+1);
+  SetLength(Sell,NumGoods+1);
+  SetLength(ExchangeFor,NumGoods+1);
+   else if EquiInitialPrices then
+    for J := 1 to NumGoods do Q[J] := OX[NumGoods]/OX[J]
+  else for J := 1 to NumGoods do Q[J] := Random;
+  for J := 1 to NumGoods do X[J] := 0;
+  P[Produces] := P[Produces]*0.8;
+  SetDemandAndSupply;
+end;
+
+Procedure AgentF.Copy(K,N : Integer);
+var
+  I,OldIndex,OldProduces: Integer;
+begin
+  if NumAgentsF[Produces] < 10 then Exit;
+  OldIndex := Index;
+  OldProduces := Produces;
+  AgentsF[K,NumAgentsF[K]+1] := Self;
+  Wf := AgentsF[K,N].Wf
+  for I := 1 to NumGoods do begin
+    P[I] := AgentsF[K,N].P[I];
+    X[I] := AgentsF[K,N].X[I];
+  end;
+  Produces := K;
+  Inc(NumAgentsF[K]);
+  Index := NumAgentsF[K];
+  if OldIndex <> NumAgentsF[OldProduces] then begin
+    AgentsF[OldProduces,OldIndex] := AgentsF[OldProduces,NumAgentsF[OldProduces]];
+    AgentsF[OldProduces,OldIndex].Index := OldIndex;
+  end;
+  Dec(NumAgentsF[OldProduces]);
+end;
+
+## draft copy and mutation procedures
+
+## Household price mutation
+Procedure AgentH.PriceMutateH(N : Integer);
+const
+  delta = 0.95;
+var
+  I : Integer;
+begin
+  for I := 1 to NumGoods do begin
+    P[I] := AgentsH[N].P[I];
+    if not CheckEfficiency and (Random < MRate) then begin
+      if Random < 0.5 then P[I] := P[I]*delta
+      else P[I] := P[I]/delta;
+      if Random < 0.5 then Wh := Wh*delta
+      else Wh := Wh/Delta; 
+    end;
+  end;
+end;
+
+##Firm price mutation
+Procedure AgentF.PriceMutateF(N : Integer);
+const
+  delta = 0.95;
+var
+  I : Integer;
+begin
+  for I := 1 to NumGoods do begin
+    Q[I] := AgentsF[Produces,N].Q[I];
+    if not CheckEfficiency and (Random < MRate) then begin
+      if Random < 0.5 then Q[I] := Q[I]*Delta
+      else Q[I] := Q[I]/Delta;
+      if Random < 0.5 then Wf := Wf*Delta
+      else Wf := Wf/Delta;
+    end;
+  end;
+end;
+
+## get next gen households
+Procedure GetNextGenerationH1;
+var
+	I,J,K,Replacements : Integer;
+begin
+	Replacements := Round(NumAgentsH*ReplacementRate);
+  if Replacements = 0 then Inc(Replacements);
+  for I := 1 to Replacements do begin
+    Application.ProcessMessages;
+    if HaltSimulation then Exit;
+    J := 1 + Random(NumAgentsH);
+    K := 1 + Random(NumAgentsH);
+    if AgentsH[J].Score > AgentsH[K].Score then
+      AgentsH[K].PriceMutateH(J)
+    else AgentsH[J].PriceMutateH(K);
+  end;
+  for I := 1 to NumAgentsH[G] do AgentsH[G,I].Score := 0;
+end;
+
+## get next gen firms
+Procedure GetNextGenerationF1(G : Integer);
+var
+	I,J,K,Replacements : Integer;
+begin
+	Replacements := Round(NumAgentsF[G]*ReplacementRate);
+  if Replacements = 0 then Inc(Replacements);
+  for I := 1 to Replacements do begin
+    Application.ProcessMessages;
+    if HaltSimulation then Exit;
+    J := 1 + Random(NumAgentsF[G]);
+    K := 1 + Random(NumAgentsF[G]);
+    if AgentsF[G,J].Profit > AgentsF[G,K].Profit then
+      AgentsF[G,K].PriceMutateF(G,J)
+    else AgentsF[G,J].PriceMutateF(G,K);
+  end;
+  for I := 1 to NumAgentsF[G] do AgentsF[G,I].Score := 0;
+end;
+
+Procedure ProducerShift;
+var
+	I,J,K,L,M,N,Replacements : Integer;
+begin
+	Replacements := Round(TotalAgents*ProducerShiftRate);
+  for I := 1 to NumGoods do begin
+    for J := 1 to Replacements do begin
+      Application.ProcessMessages;
+      if HaltSimulation then Exit;
+      K := 1 + Random(NumGoods);
+      repeat
+        L := 1 + Random(NumGoods);
+      until L <> K;
+      M := 1 + Random(NumAgents[K]);
+      N := 1 + Random(NumAgents[L]);
+      if ScoreAve[K] < ScoreAve[L] then AgentsF[K,M].Copy(L,N)
+      else AgentsF[L,N].Copy(K,M);
+//      if AgentsF[K,M].Score < AgentsF[L,N].Score then AgentsF[K,M].Copy(L,N)
+//      else AgentsF[L,N].Copy(K,M);
+    end;
+  end;
+end;
+
+Function LabourPlay;
+var 
+  G,H,I,J,K,L : Integer;
+begin
+ Shuffle(HAgents,NumAgentsH);
+  for I := 1 to NumAgentsH do begin
+      A := AgentsH[HAgents[I]];
+      Assert(Assigned(A));
+      if A.LabourH = 1 then begin;
+            for G := 1 to MaxLabourSearch do begin;
+            K := 1 + Random(NumGoods)
+            L := 1 + Random(NumAgentsF)
+                  if AgentsF[K,L].LabourF = 0 then begin;
+                     Income := (A.Wh + AgentsF[K,L].Wf)/2
+                     AgentsF[K,L].Profit := AgentsF[K,L].Profit - (A.Wh + AgentsF[K,L].Wf)/2
+                     A.LabourH := 0
+                     AgentsF[K,L].LabourF := 1
+                     Break;
+       end;
+      end;
+     end;
+
+Procedure GoodsPlay;
+var
+  I,J,K,L,M : Integer;
+  A : Agent;
+begin
+  Shuffle(PGoods,NumGoods);
+  for I := 1 to NumGoods do Shuffle(PAgents[PGoods[I]],NumAgents[PGoods[I]]);
+  for I := 1 to NumGoods do begin
+    for J := 1 to NumAgents[PGoods[I]] do begin
+      A := AgentsF[PGoods[I],PAgents[PGoods[I],J]];
+      Assert(Assigned(A));
+        for M := 1 to MaxGoodsSearch do begin
+        L = 1 + Random(NumAgentsH);
+          if AgentsH[L].X[A.Produces] := 0 && 
+            AgentsH[L].Income > (AgentsH[L].P[A.Produces] + A.Q[Produces])/2 then begin
+              AgentsH[L].X[A.Produces] = 1
+              AgentsH[L].Income := AgentsH[L].Income - (AgentsH[L].P[A.Produces] + A.Q[Produces])/2;
+              AgentsH[L].Score := AgentsH[L].Score + OX[A.Produces]/((AgentsH[L].P[A.Produces] + A.Q[Produces])/2);
+              A.Y[Produces] := 0;
+              A.Profit := A.Profit + (AgentsH[L].P[A.Produces] + A.Q[Produces])/2;
+              Break;             
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+
+
 Procedure TForm1.Button1Click(Sender: TObject);
 var
 	I,J,K,L,M : Integer;
