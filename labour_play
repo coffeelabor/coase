@@ -2,6 +2,8 @@
 
 ## agents trade at average of respective wage rates if that average exceeds or is equal to price of production for firm
 
+
+## labour constraint
 Function LabourPlay;
 var 
   G,H,I,J,K,L : Integer;
@@ -24,3 +26,21 @@ begin
       end;
      end;
 
+## no labour constraint
+Function LabourPlay;
+var 
+  G,H,I,J,K,L : Integer;
+begin
+ Shuffle(HAgents,NumAgentsH);
+  for I := 1 to NumAgentsH do begin
+      A := AgentsH[HAgents[I]];
+      Assert(Assigned(A));
+      if A.LabourH = 1 then begin;
+            for G := 1 to MaxLabourSearch do begin;
+            K := 1 + Random(NumGoods)
+            L := 1 + Random(NumAgentsF)
+                     Income := (A.Wh + AgentsF[K,L].Wf)/2
+                     AgentsF[K,L].Profit := AgentsF[K,L].Profit - (A.Wh + AgentsF[K,L].Wf)/2
+                     A.LabourH := 0
+                     AgentsF[K,L].LabourF := AgentsF[K,L].LabourF + 1
+                     Break;
