@@ -68,9 +68,6 @@ type
     Procedure Copy(N : Integer); overload;
     Procedure CopyAndMutate(N : Integer);
     Procedure Copy(K,N : Integer); overload;
-    Procedure Eat;
-    Procedure CommonPriceEat(EPrices : RealArray);
-    Function Trade(B : Agent) : Boolean;
     Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
     Function Lambda : Real;
     Function CommonPriceLambda(EPrices : RealArray) : Real;
@@ -84,9 +81,6 @@ type
     Procedure Copy(N : Integer); overload;
     Procedure CopyAndMutate(N : Integer);
     Procedure Copy(K,N : Integer); overload;
-    Procedure Eat;
-    Procedure CommonPriceEat(EPrices : RealArray);
-    Function Trade(B : Agent) : Boolean;
     Function CommonPriceTrade(B : Agent;EPrices : RealArray) : Boolean;
     Function Lambda : Real;
     Function CommonPriceLambda(EPrices : RealArray) : Real;
