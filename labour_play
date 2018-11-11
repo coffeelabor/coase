@@ -21,6 +21,7 @@ begin
                      AgentsF[K,L].Profit := AgentsF[K,L].Profit - (A.Wh + AgentsF[K,L].Wf)/2
                      A.LabourH := 0
                      AgentsF[K,L].LabourF := 1
+                     AgentsF[K,L].X[Produces] := 1
                      Break;
        end;
       end;
@@ -43,4 +44,6 @@ begin
                      AgentsF[K,L].Profit := AgentsF[K,L].Profit - (A.Wh + AgentsF[K,L].Wf)/2
                      A.LabourH := 0
                      AgentsF[K,L].LabourF := AgentsF[K,L].LabourF + 1
+                     AgentsF[K,L].X[Produces] := AgentsF[K,L].X[Produces] + 1
                      Break;
+                     
