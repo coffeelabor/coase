@@ -4,6 +4,9 @@
 2. no labour purchase constraint
 3. minimum wage
 4. no minimum wage
+
+## min wage set as string in .exe
+
 5. firm entry/exit
 6. no firm entry/exit
 7. additive utility
