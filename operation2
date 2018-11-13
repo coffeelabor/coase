@@ -113,6 +113,7 @@ var
   ReproducePeriod,CheckPeriod,Periods : Integer;
   MaxTries : Integer;
   Alpha : Extended;
+  MinWage : Extended;
   NumAgentsF : Array of Integer;
   NumAgentsH : Array of Integer;
   TOX : RealArray;
@@ -361,8 +362,9 @@ begin
   EquiInitialPrices := EquiInitialPriceBox.Checked;
   if Assigned(Agents) then SetLength(Agents,0);
   NumGoods := StrToInt(NumGoodsBox.Text);
-	NumAgentsH := StrToInt(NumAgentsHBox.Text);
+  NumAgentsH := StrToInt(NumAgentsHBox.Text);
   TotalAgentsF := StrToInt(NumAgentsFBox.Text);
+  MinWage := StrToInt(MinWageBox.Text);
   SetLength(NumAgentsF,1+NumGoods);
   for I := 1 to NumGoods do
     NumAgentsF[I] := TotalAgentsF;
