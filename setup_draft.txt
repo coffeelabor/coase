@@ -108,6 +108,7 @@ var
   ReproducePeriod,CheckPeriod,Periods : Integer;
   MaxTries : Integer;
   Alpha : Extended;
+  MinWage : Extended;
   NumAgentsF : Array of Integer;
   NumAgentsH : Array of Integer;
   TOX : RealArray;
